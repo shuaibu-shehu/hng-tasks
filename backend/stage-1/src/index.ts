@@ -1,16 +1,16 @@
 import express from "express";
-import { CorsOptions } from "cors";
 import axios from "axios";
 import  cors from "cors";
+import dotenv from "dotenv";
 
 
-
+dotenv.config();
 const app = express();
 
 app.use(cors());
 app.get("/api/hello", async (req, res) => {
  const visitorName =  req.query.visitor_name;
- const apiKey = "18e8579b9f367714bf5e7e01c346f50c"
+ const apiKey =  process.env.IPSTACK_API_KEY;
  const visitorIP = req.ip == "::1" ? "103.23.29.120": req.ip; 
  const url = `http://api.ipstack.com/${visitorIP}?access_key=${apiKey}`;
 
