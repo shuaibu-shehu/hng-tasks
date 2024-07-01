@@ -2,7 +2,7 @@
     "version": 2,
     "builds": [
       {
-        "src": "src/index.js",
+        "src": "dist/index.js",
         "use": "@now/node",
         "config": { 
             "distDir": "dist" 
@@ -11,11 +11,9 @@
     ],
     "routes": [
       {
-        "src": "/api/hello",
-        "dest": "/src/index.ts"
+        "src": "api/(.*)",
+        "dest": "/dist/index.ts"
       }
-    ],
-    "env": {
-        "IPSTACK_API_KEY": "@ipstack_api_key"
-      }
+    ]
+    
   }
