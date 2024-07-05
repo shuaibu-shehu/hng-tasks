@@ -11,20 +11,26 @@ app.use(cors());
 app.get("/api/hello", async (req:Request, res:Response) => {
  const visitorName =  req.query.visitor_name;
  const apiKey =  process.env.IPSTACK_API_KEY;
+ const openWeatherApiKey = process.env.OPEN_WEATHER_API_KEY;
+
+ 
  const visitorIP = req.ip == "::1" ? "103.23.29.120": req.ip; 
  const url = `http://api.ipstack.com/${visitorIP}?access_key=${apiKey}`;
 
- console.log(req.ip);
  
  try {
    const response = await axios.get(url);
    const location = response.data;
 
-
-   res.json({
+   console.log("Location data:", location);
+   
+    const waether= await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=${openWeatherApiKey}`) 
+   console.log("Weather data:", waether.data);
+   
+    res.json({
         client_ip:visitorIP,
         location: location.country_name,
-        greeting: `Hello, ${visitorName}`,
+        greeting: `Hello, ${visitorName}, the temperature is ${waether.data.main.temp} degress celcius in ${location.city}`,
    });
  } catch (error) {
    console.error("Error fetching location data:", error);
